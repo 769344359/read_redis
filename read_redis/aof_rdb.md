@@ -53,3 +53,35 @@ void addReplyBulk(client *c, robj *obj) {
     addReply(c,shared.crlf);
 }
 ```
+
+> 写的时候 
+添加到缓冲区
+```
+(gdb) bt
+#0  dictAdd (d=0x7ff35c218360, key=0x7ff35c216779, val=0x7ff35c32fe58) at dict.c:267
+#1  0x0000000000447b8e in dbAdd (db=0x7ff35c2ff000, key=0x7ff35c32fe88, val=0x7ff35c32fe58) at db.c:169
+#2  0x0000000000447d31 in setKey (db=0x7ff35c2ff000, key=0x7ff35c32fe88, val=0x7ff35c32fe58) at db.c:208
+#3  0x0000000000456a44 in setGenericCommand (c=0x7ff35c31eec0, flags=0, key=0x7ff35c32fe88, val=0x7ff35c32fe58, expire=0x0, unit=0, ok_reply=0x0, abort_reply=0x0) at t_string.c:86
+#4  0x0000000000456dad in setCommand (c=0x7ff35c31eec0) at t_string.c:139
+#5  0x000000000042f630 in call (c=0x7ff35c31eec0, flags=15) at server.c:2229
+#6  0x00000000004301b5 in processCommand (c=0x7ff35c31eec0) at server.c:2510
+#7  0x000000000044075e in processInputBuffer (c=0x7ff35c31eec0) at networking.c:1354
+#8  0x0000000000440b31 in readQueryFromClient (el=0x7ff35c2410a0, fd=8, privdata=0x7ff35c31eec0, mask=1) at networking.c:1444
+#9  0x0000000000426d88 in aeProcessEvents (eventLoop=0x7ff35c2410a0, flags=11) at ae.c:443
+#10 0x0000000000426fa2 in aeMain (eventLoop=0x7ff35c2410a0) at ae.c:501
+#11 0x0000000000433dfc in main (argc=1, argv=0x7ffddbfa41a8) at server.c:3894
+
+```
+真正可写的时候 ，调用write 写到socket
+```
+(gdb) bt
+#0  write () at ../sysdeps/unix/syscall-template.S:84
+#1  0x000000000043f545 in writeToClient (fd=8, c=0x7ff35c31eec0, handler_installed=0) at networking.c:905
+#2  0x000000000043f8fe in handleClientsWithPendingWrites () at networking.c:1012
+#3  0x000000000042cf00 in beforeSleep (eventLoop=0x7ff35c2410a0) at server.c:1232
+#4  0x0000000000426f91 in aeMain (eventLoop=0x7ff35c2410a0) at ae.c:500
+#5  0x0000000000433dfc in main (argc=1, argv=0x7ffddbfa41a8) at server.c:3894
+
+```
+
+
