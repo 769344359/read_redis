@@ -85,3 +85,62 @@ void addReplyBulk(client *c, robj *obj) {
 ```
 
 
+
+<del>写的时候的aof堆栈</del>
+```
+(gdb) bt
+#0  expireIfNeeded (db=0x7ff35c2ff000, key=0x7ff35c32fe88) at db.c:1117
+#1  0x0000000000447a94 in lookupKeyWrite (db=0x7ff35c2ff000, key=0x7ff35c32fe88) at db.c:147
+#2  0x0000000000447d15 in setKey (db=0x7ff35c2ff000, key=0x7ff35c32fe88, val=0x7ff35c32fea0) at db.c:207
+#3  0x0000000000456a44 in setGenericCommand (c=0x7ff35c31eec0, flags=0, key=0x7ff35c32fe88, val=0x7ff35c32fea0, expire=0x0, unit=0, ok_reply=0x0, abort_reply=0x0) at t_string.c:86
+#4  0x0000000000456dad in setCommand (c=0x7ff35c31eec0) at t_string.c:139
+#5  0x000000000042f630 in call (c=0x7ff35c31eec0, flags=15) at server.c:2229
+#6  0x00000000004301b5 in processCommand (c=0x7ff35c31eec0) at server.c:2510
+#7  0x000000000044075e in processInputBuffer (c=0x7ff35c31eec0) at networking.c:1354
+#8  0x0000000000440b31 in readQueryFromClient (el=0x7ff35c2410a0, fd=8, privdata=0x7ff35c31eec0, mask=1) at networking.c:1444
+#9  0x0000000000426d88 in aeProcessEvents (eventLoop=0x7ff35c2410a0, flags=11) at ae.c:443
+#10 0x0000000000426fa2 in aeMain (eventLoop=0x7ff35c2410a0) at ae.c:501
+#11 0x0000000000433dfc in main (argc=1, argv=0x7ffddbfa41a8) at server.c:3894
+
+```
+
+
+aof　添加到buf
+```
+(gdb) bt
+#0  feedAppendOnlyFile (cmd=0x93b7c0 <redisCommandTable+160>, dictid=0, 
+    argv=0x7f035b421dd8, argc=3) at aof.c:555
+#1  0x000000000042f39e in propagate (cmd=0x93b7c0 <redisCommandTable+160>, 
+    dbid=0, argv=0x7f035b421dd8, argc=3, flags=3) at server.c:2112
+#2  0x000000000042f8fe in call (c=0x7f035b51e700, flags=15) at server.c:2291
+#3  0x00000000004301b5 in processCommand (c=0x7f035b51e700) at server.c:2510
+#4  0x000000000044075e in processInputBuffer (c=0x7f035b51e700)
+    at networking.c:1354
+#5  0x0000000000440b31 in readQueryFromClient (el=0x7f035b43a140, fd=9, 
+    privdata=0x7f035b51e700, mask=1) at networking.c:1444
+#6  0x0000000000426d88 in aeProcessEvents (eventLoop=0x7f035b43a140, flags=11)
+    at ae.c:443
+#7  0x0000000000426fa2 in aeMain (eventLoop=0x7f035b43a140) at ae.c:501
+#8  0x0000000000433dfc in main (argc=2, argv=0x7fff24014948) at server.c:3894
+```
+
+fsync 同步,set　的主线程发送“信号”
+```
+(gdb) bt
+#0  bioCreateBackgroundJob (type=1, arg1=0x8, arg2=0x0, arg3=0x0) at bio.c:132
+#1  0x0000000000473089 in aof_background_fsync (fd=8) at aof.c:203
+#2  0x0000000000473911 in flushAppendOnlyFile (force=0) at aof.c:488
+#3  0x000000000042cefb in beforeSleep (eventLoop=0x7f035b43a140) at server.c:1229
+#4  0x0000000000426f91 in aeMain (eventLoop=0x7f035b43a140) at ae.c:500
+#5  0x0000000000433dfc in main (argc=2, argv=0x7fff24014948) at server.c:3894
+```
+
+作为同步的线程
+```
+(gdb) bt
+#0  fdatasync () at ../sysdeps/unix/syscall-template.S:84
+#1  0x000000000049392a in bioProcessBackgroundJobs (arg=0x1) at bio.c:190
+#2  0x00007f035c2346ba in start_thread (arg=0x7f035abfe700) at pthread_create.c:333
+#3  0x00007f035bf6a41d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:109
+```
+
