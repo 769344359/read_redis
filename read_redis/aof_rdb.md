@@ -144,3 +144,10 @@ fsync 同步,set　的主线程发送“信号”
 #3  0x00007f035bf6a41d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:109
 ```
 
+加载aof文件
+```
+(gdb) bt
+#0  loadAppendOnlyFile (filename=0x7ffff6817010 "appendonly.aof") at aof.c:673
+#1  0x000000000043305c in loadDataFromDisk () at server.c:3554
+#2  0x0000000000433d0d in main (argc=2, argv=0x7fffffffe518) at server.c:3870
+```
