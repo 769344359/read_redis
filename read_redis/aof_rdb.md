@@ -151,3 +151,31 @@ fsync 同步,set　的主线程发送“信号”
 #1  0x000000000043305c in loadDataFromDisk () at server.c:3554
 #2  0x0000000000433d0d in main (argc=2, argv=0x7fffffffe518) at server.c:3870
 ```
+
+
+
+
+--- 
+分割线
+
+> rdb 加载
+```
+(gdb) bt
+#0  rdbLoad (filename=0x7ffff6817000 "dump.rdb", rsi=0x7fffffffe370) at rdb.c:1677
+#1  0x000000000043310f in loadDataFromDisk () at server.c:3558
+#2  0x0000000000433d0d in main (argc=1, argv=0x7fffffffe528) at server.c:3870
+```
+
+> 手动调用命令`save`
+```
+(gdb) bt
+#0  rdbSave (filename=0x7ffff6817000 "dump.rdb", rsi=0x0) at rdb.c:1003
+#1  0x000000000045655e in saveCommand (c=0x7ffff691ed00) at rdb.c:2004
+#2  0x000000000042f630 in call (c=0x7ffff691ed00, flags=15) at server.c:2229
+#3  0x00000000004301b5 in processCommand (c=0x7ffff691ed00) at server.c:2510
+#4  0x000000000044075e in processInputBuffer (c=0x7ffff691ed00) at networking.c:1354
+#5  0x0000000000440b31 in readQueryFromClient (el=0x7ffff683c0a0, fd=8, privdata=0x7ffff691ed00, mask=1) at networking.c:1444
+#6  0x0000000000426d88 in aeProcessEvents (eventLoop=0x7ffff683c0a0, flags=11) at ae.c:443
+#7  0x0000000000426fa2 in aeMain (eventLoop=0x7ffff683c0a0) at ae.c:501
+#8  0x0000000000433dfc in main (argc=1, argv=0x7fffffffe528) at server.c:3894
+```
