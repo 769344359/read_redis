@@ -7,6 +7,11 @@ https://redis.io/topics/protocol
 http://redisdoc.com/topic/protocol.html
 ```
 
+rdb 和 aof 介绍翻译
+```
+http://www.redis.cn/topics/persistence.html
+```
+
 ## 执行流程
 get 命令的主要执行步骤
 
