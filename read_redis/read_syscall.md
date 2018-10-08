@@ -2,6 +2,7 @@
 https://yq.aliyun.com/articles/617950
 https://www.ibm.com/developerworks/cn/linux/l-cn-ftrace/index.html
 http://oenhan.com/linux-kernel-write
+https://www.ibm.com/developerworks/cn/linux/l-linux-filesystem/index.html
 ```
 > 主要的函数指针
 ```
