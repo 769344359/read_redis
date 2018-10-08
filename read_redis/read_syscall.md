@@ -164,20 +164,24 @@ ssize_t generic_perform_write(struct file *file,
 write_begin
 ```
 (gdb) bt
-#0  ext4_write_begin (file=0x6268d400, mapping=0x6202eff8, pos=6, len=3, flags=0, pagep=0x6268fbf8, fsdata=0x6268fc00) at fs/ext4/inode.c:1245
-#1  0x000000006008c443 in generic_perform_write (file=<optimized out>, i=0x6202eff8, pos=6) at mm/filemap.c:3138
-#2  0x000000006008c710 in __generic_file_write_iter (iocb=0x6268fd60, from=<optimized out>) at mm/filemap.c:3263
-#3  0x0000000060163e8a in ext4_file_write_iter (iocb=0x6268fd60, from=0x6268fd90) at fs/ext4/file.c:266
-#4  0x00000000600d8ddc in call_write_iter (iter=<optimized out>, kio=<optimized out>, file=<optimized out>) at ./include/linux/fs.h:1781
-#5  new_sync_write (ppos=<optimized out>, len=<optimized out>, buf=<optimized out>, filp=<optimized out>) at fs/read_write.c:469
-#6  __vfs_write (file=0x6268d400, p=<optimized out>, count=<optimized out>, pos=0x6268fe58) at fs/read_write.c:482
-#7  0x00000000600d9061 in vfs_write (file=0x6268d400, buf=0x8872e0 <error: Cannot access memory at address 0x8872e0>, count=3, pos=0x6268fe58) at fs/read_write.c:544
-#8  0x00000000600d9343 in SYSC_write (count=<optimized out>, buf=<optimized out>, fd=<optimized out>) at fs/read_write.c:589
-#9  SyS_write (fd=<optimized out>, buf=8942304, count=3) at fs/read_write.c:581
-#10 0x000000006001c298 in handle_syscall (r=0x624d3b90) at arch/um/kernel/skas/syscall.c:32
-#11 0x000000006002bedc in handle_trap (local_using_sysemu=<optimized out>, regs=<optimized out>, pid=<optimized out>) at arch/um/os-Linux/skas/process.c:172
-#12 userspace (regs=0x624d3b90, aux_fp_regs=<optimized out>) at arch/um/os-Linux/skas/process.c:416
-#13 0x0000000060018534 in fork_handler () at arch/um/kernel/process.c:153
-#14 0x0000000000000002 in ?? ()
-#15 0x0000000000000000 in ?? ()
+#0  find_get_entry (mapping=0x6202eff8, offset=0) at mm/filemap.c:1423
+#1  0x000000006008a15f in pagecache_get_page (mapping=0x6202eff8, offset=0, fgp_flags=14, gfp_mask=21102794) at mm/filemap.c:1540
+#2  0x000000006008c366 in grab_cache_page_write_begin (mapping=<optimized out>, index=<optimized out>, flags=<optimized out>) at mm/filemap.c:3088
+#3  0x0000000060178b2b in ext4_write_begin (file=<optimized out>, mapping=<optimized out>, pos=<optimized out>, len=3, flags=<optimized out>, pagep=<optimized out>, fsdata=0x6268fc00)
+    at fs/ext4/inode.c:1283
+#4  0x000000006008c443 in generic_perform_write (file=<optimized out>, i=0x0, pos=14) at mm/filemap.c:3138
+#5  0x000000006008c710 in __generic_file_write_iter (iocb=0x6268fd60, from=<optimized out>) at mm/filemap.c:3263
+#6  0x0000000060163e8a in ext4_file_write_iter (iocb=0x6268fd60, from=0x6268fd90) at fs/ext4/file.c:266
+#7  0x00000000600d8ddc in call_write_iter (iter=<optimized out>, kio=<optimized out>, file=<optimized out>) at ./include/linux/fs.h:1781
+#8  new_sync_write (ppos=<optimized out>, len=<optimized out>, buf=<optimized out>, filp=<optimized out>) at fs/read_write.c:469
+#9  __vfs_write (file=0x6202eff8, p=<optimized out>, count=<optimized out>, pos=0x6268fe58) at fs/read_write.c:482
+#10 0x00000000600d9061 in vfs_write (file=0x6268d400, buf=0x8872e0 <error: Cannot access memory at address 0x8872e0>, count=3, pos=0x6268fe58) at fs/read_write.c:544
+#11 0x00000000600d9343 in SYSC_write (count=<optimized out>, buf=<optimized out>, fd=<optimized out>) at fs/read_write.c:589
+#12 SyS_write (fd=<optimized out>, buf=8942304, count=3) at fs/read_write.c:581
+#13 0x000000006001c298 in handle_syscall (r=0x624d3b90) at arch/um/kernel/skas/syscall.c:32
+#14 0x000000006002bedc in handle_trap (local_using_sysemu=<optimized out>, regs=<optimized out>, pid=<optimized out>) at arch/um/os-Linux/skas/process.c:172
+#15 userspace (regs=0x624d3b90, aux_fp_regs=<optimized out>) at arch/um/os-Linux/skas/process.c:416
+#16 0x0000000060018534 in fork_handler () at arch/um/kernel/process.c:153
+#17 0x0000000000000002 in ?? ()
+#18 0x0000000000000000 in ?? ()
 ```
