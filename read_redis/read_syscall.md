@@ -15,3 +15,17 @@
 #8  0x0000000060018534 in fork_handler () at arch/um/kernel/process.c:153
 #9  0x0000000000000000 in ?? ()
 ```
+
+```
+// D:\linux-master\fs\read_write.c
+ssize_t __vfs_read(struct file *file, char __user *buf, size_t count,
+		   loff_t *pos)
+{
+	if (file->f_op->read)   // 没有read
+		return file->f_op->read(file, buf, count, pos);
+	else if (file->f_op->read_iter)    // 有read_iter
+		return new_sync_read(file, buf, count, pos);   // 调用new_sync_read
+	else
+		return -EINVAL;
+}
+```
