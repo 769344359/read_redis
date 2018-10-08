@@ -1,3 +1,26 @@
+> 主要的函数指针
+```
+const struct file_operations ext4_file_operations = {
+	.llseek		= ext4_llseek,
+	.read_iter	= ext4_file_read_iter,
+	.write_iter	= ext4_file_write_iter,
+	.unlocked_ioctl = ext4_ioctl,
+#ifdef CONFIG_COMPAT
+	.compat_ioctl	= ext4_compat_ioctl,
+#endif
+	.mmap		= ext4_file_mmap,
+	.mmap_supported_flags = MAP_SYNC,
+	.open		= ext4_file_open,
+	.release	= ext4_release_file,
+	.fsync		= ext4_sync_file,
+	.get_unmapped_area = thp_get_unmapped_area,
+	.splice_read	= generic_file_splice_read,
+	.splice_write	= iter_file_splice_write,
+	.fallocate	= ext4_fallocate,
+};
+```
+
+
 > read   
 ```
 (gdb) bt
@@ -32,4 +55,21 @@ ssize_t __vfs_read(struct file *file, char __user *buf, size_t count,
 ```
 ```
 //todo
+```
+
+> write 
+
+- 堆栈晚点加  
+和read 类似也是经过vfs 之后自己调用write或者write_iter
+```
+ssize_t __vfs_write(struct file *file, const char __user *p, size_t count,
+		    loff_t *pos)
+{
+	if (file->f_op->write)
+		return file->f_op->write(file, p, count, pos);
+	else if (file->f_op->write_iter)
+		return new_sync_write(file, p, count, pos);
+	else
+		return -EINVAL;
+}
 ```
