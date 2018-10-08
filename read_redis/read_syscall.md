@@ -82,7 +82,26 @@ ssize_t __vfs_read(struct file *file, char __user *buf, size_t count,
 
 > write 
 
-- 堆栈晚点加  
+- 堆栈  
+```
+(gdb) bt
+#0  generic_perform_write (file=0x6268d400, i=0x6268fd90, pos=6) at mm/filemap.c:3099
+#1  0x000000006008c710 in __generic_file_write_iter (iocb=0x6268fd60, from=<optimized out>) at mm/filemap.c:3263
+#2  0x0000000060163e8a in ext4_file_write_iter (iocb=0x6268fd60, from=0x6268fd90) at fs/ext4/file.c:266
+#3  0x00000000600d8ddc in call_write_iter (iter=<optimized out>, kio=<optimized out>, file=<optimized out>) at ./include/linux/fs.h:1781
+#4  new_sync_write (ppos=<optimized out>, len=<optimized out>, buf=<optimized out>, filp=<optimized out>) at fs/read_write.c:469
+#5  __vfs_write (file=0x6268d400, p=<optimized out>, count=<optimized out>, pos=0x6268fe58) at fs/read_write.c:482
+#6  0x00000000600d9061 in vfs_write (file=0x6268d400, buf=0x8872e0 <error: Cannot access memory at address 0x8872e0>, count=3, pos=0x6268fe58) at fs/read_write.c:544
+#7  0x00000000600d9343 in SYSC_write (count=<optimized out>, buf=<optimized out>, fd=<optimized out>) at fs/read_write.c:589
+#8  SyS_write (fd=<optimized out>, buf=8942304, count=3) at fs/read_write.c:581
+#9  0x000000006001c298 in handle_syscall (r=0x624d3b90) at arch/um/kernel/skas/syscall.c:32
+#10 0x000000006002bedc in handle_trap (local_using_sysemu=<optimized out>, regs=<optimized out>, pid=<optimized out>) at arch/um/os-Linux/skas/process.c:172
+#11 userspace (regs=0x624d3b90, aux_fp_regs=<optimized out>) at arch/um/os-Linux/skas/process.c:416
+#12 0x0000000060018534 in fork_handler () at arch/um/kernel/process.c:153
+#13 0x0000000000000002 in ?? ()
+#14 0x0000000000000000 in ?? ()
+
+```
 和read 类似也是经过vfs 之后自己调用write或者write_iter
 ```
 ssize_t __vfs_write(struct file *file, const char __user *p, size_t count,
