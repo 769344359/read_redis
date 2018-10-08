@@ -1,5 +1,6 @@
 ```
 https://yq.aliyun.com/articles/617950
+https://www.ibm.com/developerworks/cn/linux/l-cn-ftrace/index.html
 ```
 > 主要的函数指针
 ```
