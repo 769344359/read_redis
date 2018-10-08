@@ -115,3 +115,27 @@ static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t 
 ```
 
 下面我们来主要看看`ext4_file_write_iter`
+
+
+
+```
+ssize_t generic_perform_write(struct file *file,
+				struct iov_iter *i, loff_t pos)
+{
+...
+		status = a_ops->write_begin(file, mapping, pos, bytes, flags,
+						&page, &fsdata);
+		if (unlikely(status < 0))
+			break;
+
+		if (mapping_writably_mapped(mapping))
+			flush_dcache_page(page);
+
+		copied = iov_iter_copy_from_user_atomic(page, i, offset, bytes);
+		flush_dcache_page(page);
+
+		status = a_ops->write_end(file, mapping, pos, bytes, copied,
+						page, fsdata);
+...
+}
+```
