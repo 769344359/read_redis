@@ -73,3 +73,21 @@ ssize_t __vfs_write(struct file *file, const char __user *p, size_t count,
 		return -EINVAL;
 }
 ```
+
+
+调用
+```
+static inline ssize_t call_write_iter(struct file *file, struct kiocb *kio,
+				      struct iov_iter *iter)
+{
+	return file->f_op->write_iter(kio, iter);
+}
+static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t len, loff_t *ppos)
+{
+...
+	ret = call_write_iter(filp, &kiocb, &iter);
+	if (ret > 0)
+		*ppos = kiocb.ki_pos;
+	return ret;
+}
+```
