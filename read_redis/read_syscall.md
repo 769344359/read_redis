@@ -1,3 +1,6 @@
+```
+https://yq.aliyun.com/articles/617950
+```
 > 主要的函数指针
 ```
 const struct file_operations ext4_file_operations = {
@@ -75,7 +78,7 @@ ssize_t __vfs_write(struct file *file, const char __user *p, size_t count,
 ```
 
 
-调用`new_sync_write` 最后调用的是 `call_write_iter`
+调用`new_sync_write` 最后调用的是 `call_write_iter` 也就是`ext4_file_write_iter`
 ```
 static inline ssize_t call_write_iter(struct file *file, struct kiocb *kio,
 				      struct iov_iter *iter)
@@ -91,3 +94,5 @@ static ssize_t new_sync_write(struct file *filp, const char __user *buf, size_t 
 	return ret;
 }
 ```
+
+下面我们来主要看看`ext4_file_write_iter`
