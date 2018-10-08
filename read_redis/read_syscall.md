@@ -75,7 +75,7 @@ ssize_t __vfs_write(struct file *file, const char __user *p, size_t count,
 ```
 
 
-调用
+调用`new_sync_write` 最后调用的是 `call_write_iter`
 ```
 static inline ssize_t call_write_iter(struct file *file, struct kiocb *kio,
 				      struct iov_iter *iter)
