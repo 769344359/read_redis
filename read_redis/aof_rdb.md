@@ -29,7 +29,7 @@ AOF 文件有序地保存了对数据库执行的所有写入操作， 这些写
 根据所使用的 fsync 策略，AOF 的速度可能会慢于 RDB 。 在一般情况下， 每秒 fsync 的性能依然非常高， 而关闭 fsync 可以让 AOF 的速度和 RDB 一样快， 即使在高负荷之下也是如此。 不过在处理巨大的写入载入时，RDB 可以提供更有保证的最大延迟时间（latency）。
 ## 执行流程
 get 命令的主要执行步骤
-![aaa](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/redis_get.svg)
+![aaa](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/redis_get.svg?sanitize=true)
 > 通过hash(key) 判断是不是在桶内
 ```
 (gdb) bt
