@@ -74,7 +74,7 @@ $18 = (int (*)(void *, const void *, const void *)) 0x42b81c <dictSdsKeyCompare>
 #10 0x0000000000426fa2 in aeMain (eventLoop=0x7fe37383a0f0) at ae.c:501
 #11 0x0000000000433dfc in main (argc=1, argv=0x7fffc866ac88) at server.c:3894
 ```
-对内容进行格式化
+对内容进行格式化写到buf 里面
 ```
 void addReplyBulk(client *c, robj *obj) {
     addReplyBulkLen(c,obj);

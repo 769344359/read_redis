@@ -1,0 +1,6 @@
+#0  write () at ../sysdeps/unix/syscall-template.S:84
+#1  0x000000000047339e in aofWrite (fd=8, buf=0x7ffff6841073 "*3\r\n$3\r\nset\r\n$2\r\nbb\r\n$2\r\nbb\r\n", len=29) at aof.c:295
+#2  0x0000000000473500 in flushAppendOnlyFile (force=0) at aof.c:369
+#3  0x000000000042cefb in beforeSleep (eventLoop=0x7ffff68480a0) at server.c:1229
+#4  0x0000000000426f91 in aeMain (eventLoop=0x7ffff68480a0) at ae.c:500
+#5  0x0000000000433dfc in main (argc=2, argv=0x7fffffffe518) at server.c:3894

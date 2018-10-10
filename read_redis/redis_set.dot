@@ -2,7 +2,13 @@ strict digraph G {
 
 main->aeMain->aeProcessEvents->readQueryFromClient->processInputBuffer->processCommand->call->setCommand->setGenericCommand->setKey->dbAdd->dictAdd
 main->aeMain->beforeSleep->handleClientsWithPendingWrites->writeToClient->write->WRITE_TO_SOCKET
-main->aeMain->beforeSleep->flushAppendOnlyFile->aof_background_fsync->bioCreateBackgroundJob
-main->aeMain->aeProcessEvents->readQueryFromClient->processInputBuffer->processCommand->call->propagate->feedAppendOnlyFile->WRITE_FILE
+main->aeMain->beforeSleep->flushAppendOnlyFile->aofWrite->WRITE_TO_FILE
+main->aeMain->beforeSleep->flushAppendOnlyFile->aof_background_fsync->bioCreateBackgroundJob->pthread_cond_signal
+main->aeMain->aeProcessEvents->readQueryFromClient->processInputBuffer->processCommand->call->propagate->feedAppendOnlyFile->MEMCPY_BUF
+subgraph cluster1{
+clone->start_thread->bioProcessBackgroundJobs->pthread_cond_wait
 clone->start_thread->bioProcessBackgroundJobs->fdatasync
+}
+pthread_cond_signal->pthread_cond_wait [ style="dashed",label="唤醒守护线程" ]
+
 }
