@@ -111,7 +111,7 @@ int _addReplyToBuffer(client *c, const char *s, size_t len) {
 
 > 写的时候 
 
-![write](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/redis_set1.svg?sanitize=true)
+![write](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/redis_set２.svg?sanitize=true)
 
 添加到缓冲区
 ```
