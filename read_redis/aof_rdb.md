@@ -209,3 +209,23 @@ fsync 同步,set　的主线程发送“信号”
 #7  0x0000000000426fa2 in aeMain (eventLoop=0x7ffff683c0a0) at ae.c:501
 #8  0x0000000000433dfc in main (argc=1, argv=0x7fffffffe528) at server.c:3894
 ```
+
+
+
+------------
+> 事件循环
+主要包括两个
+-　阻塞在`beforesleep`
+- 主要包括两个步骤
+    - 1　`aeProcessEvents`处理所有事件　write 到ｂｕｆ
+    - 2 `beforesleep`输出到ｔｃｐ　写ａｏｆ文件等等
+```
+void aeMain(aeEventLoop *eventLoop) {
+    eventLoop->stop = 0;
+    while (!eventLoop->stop) {
+        if (eventLoop->beforesleep != NULL)
+            eventLoop->beforesleep(eventLoop);
+        aeProcessEvents(eventLoop, AE_ALL_EVENTS|AE_CALL_AFTER_SLEEP);
+    }
+}
+```
