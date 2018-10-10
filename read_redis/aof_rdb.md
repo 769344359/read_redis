@@ -81,6 +81,32 @@ void addReplyBulk(client *c, robj *obj) {
     addReply(c,obj);
     addReply(c,shared.crlf);
 }
+
+/* -----------------------------------------------------------------------------
+ * Higher level functions to queue data on the client output buffer.
+ * The following functions are the ones that commands implementations will call.
+ * -------------------------------------------------------------------------- */
+
+void addReply(client *c, robj *obj) {
+    if (prepareClientToWrite(c) != C_OK) return;
+    ...
+    if (sdsEncodedObject(obj)) {
+        if (_addReplyToBuffer(c,obj->ptr,sdslen(obj->ptr)) != C_OK)
+            _addReplyObjectToList(c,obj);
+    }
+    ...
+}
+
+/* -----------------------------------------------------------------------------
+ * Low level functions to add more data to output buffers.
+ * -------------------------------------------------------------------------- */
+
+int _addReplyToBuffer(client *c, const char *s, size_t len) {
+    ...
+    memcpy(c->buf+c->bufpos,s,len);
+    c->bufpos+=len;
+    return C_OK;
+}
 ```
 
 > 写的时候 
