@@ -1,5 +1,6 @@
 [系统调用](https://github.com/769344359/reading_linux/blob/master/read_linux_code/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.md)
 
+![read_write](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/310930173141567.png)
 Redis 协议
 ```
 https://redis.io/topics/protocol
