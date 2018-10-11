@@ -1,5 +1,6 @@
 [系统调用](https://github.com/769344359/reading_linux/blob/master/read_linux_code/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.md)
 
+![system_call](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/1280px-Linux_kernel_System_Call_Interface_and_glibc.svg.png)
 ![read_write](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/310930173141567.png)
 Redis 协议
 ```
