@@ -1,3 +1,5 @@
+[系统调用](https://github.com/769344359/reading_linux/blob/master/read_linux_code/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8.md)
+
 Redis 协议
 ```
 https://redis.io/topics/protocol
@@ -111,7 +113,7 @@ int _addReplyToBuffer(client *c, const char *s, size_t len) {
 
 > 写的时候 
 
-![write](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/redis_set1.svg?sanitize=true)
+![write](https://raw.githubusercontent.com/769344359/read_redis/master/read_redis/redis_set2.svg?sanitize=true)
 
 添加到缓冲区
 ```
